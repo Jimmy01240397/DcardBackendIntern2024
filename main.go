@@ -6,6 +6,7 @@ import (
 //    "github.com/gin-contrib/sessions/cookie"
     "github.com/go-errors/errors"
 
+    "github.com/Jimmy01240397/DcardBackendIntern2024/utils/redis"
     "github.com/Jimmy01240397/DcardBackendIntern2024/router"
     "github.com/Jimmy01240397/DcardBackendIntern2024/utils/config"
 //    "github.com/Jimmy01240397/DcardBackendIntern2024/utils/database"
@@ -14,6 +15,7 @@ import (
 )
 
 func main() {
+    defer redis.Close()
     if !config.Debug {
         gin.SetMode(gin.ReleaseMode)
     }
