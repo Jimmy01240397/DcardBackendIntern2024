@@ -3,6 +3,7 @@ package ad
 import (
     "log"
 
+    "github.com/Jimmy01240397/DcardBackendIntern2024/utils/redis"
     "github.com/Jimmy01240397/DcardBackendIntern2024/utils/database"
     "github.com/Jimmy01240397/DcardBackendIntern2024/utils/time"
 )
@@ -27,4 +28,5 @@ func (c *AD) Create() {
     if result.Error != nil {
         log.Panicln(result.Error)
     }
+    redis.Clear()
 }

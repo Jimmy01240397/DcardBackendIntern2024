@@ -6,12 +6,13 @@ services:
     user: api
     environment:
     - PORT=8000
+    - DBSERVICE=postgres
     - DBNAME=addb
     - DBUSER=addb
     - DBPASSWD=addb
     - DBHOST=db
     - DBPORT=3306
-    - DEBUG=true
+    - REDISURL=cache:6379
     ports:
     - 8000:8000
     depends_on:
@@ -26,6 +27,10 @@ services:
     - MYSQL_USER=addb
     - MYSQL_PASSWORD=addb
     - MYSQL_DATABASE=addb
+    networks:
+      internal:
+  cache:
+    image: redis:latest
     networks:
       internal:
 

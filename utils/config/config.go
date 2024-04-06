@@ -13,6 +13,8 @@ var DBpasswd string
 var DBhost string
 var DBport string
 var DBname string
+var RedisURL string
+var RedisPasswd string
 
 func init() {
     loadenv()
@@ -33,4 +35,6 @@ func init() {
     DBhost = os.Getenv("DBHOST")
     DBport = os.Getenv("DBPORT")
     DBname = os.Getenv("DBNAME")
+    RedisURL = os.Getenv("REDISURL")
+    RedisPasswd = os.Getenv("REDISPASSWD")
 }

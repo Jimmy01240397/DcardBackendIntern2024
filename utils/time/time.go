@@ -20,6 +20,18 @@ func Now() Time {
     return Time(time.Now())
 }
 
+func (a Time) After(b Time) bool {
+    return time.Time(a).After(time.Time(b))
+}
+
+func (a Time) Before(b Time) bool {
+    return time.Time(a).Before(time.Time(b))
+}
+
+func (a Time) Sub(b Time) time.Duration {
+    return time.Time(a).Sub(time.Time(b))
+}
+
 func (c Time) MarshalJSON() ([]byte, error) {
     return json.Marshal(time.Time(c).Format(format))
 }
