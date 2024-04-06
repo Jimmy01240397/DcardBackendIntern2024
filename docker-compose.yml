@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    user: api
+    environment:
+    - PORT=8000
+    - DBNAME=addb
+    - DBUSER=addb
+    - DBPASSWD=addb
+    - DBHOST=db
+    - DBPORT=3306
+    - DEBUG=true
+    ports:
+    - 8000:8000
+    depends_on:
+    - db
+    networks:
+      default:
+      internal:
+  db:
+    image: mariadb:latest
+    environment:
+    - MYSQL_ROOT_PASSWORD=addb
+    - MYSQL_USER=addb
+    - MYSQL_PASSWORD=addb
+    - MYSQL_DATABASE=addb
+    networks:
+      internal:
+
+
+networks:
+  default:
+  internal:
+    internal: true
