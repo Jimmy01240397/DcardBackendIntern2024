@@ -29,10 +29,14 @@ func main() {
 
 func panicHandler(c *gin.Context, err any) {
     goErr := errors.Wrap(err, 2)
+    errmsg := ""
+    if config.Debug {
+        errmsg = goErr.Error()
+    }
     errutil.AbortAndError(c, &errutil.Err{
         Code: 500,
         Msg: "Internal server error",
-        Data: goErr.Error(),
+        Data: errmsg,
     })
 }
 

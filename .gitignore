@@ -2,5 +2,6 @@
 *.bak
 .env
 *.db
+*_gen.go
 test.go
 docker-compose-test-*.yml

@@ -1,0 +1,46 @@
+- name: gender
+  imports:
+  - '"golang.org/x/exp/slices"'
+  basetype: byte
+  init: |-
+    const (
+        M Gender = iota
+        F
+        Unknown Gender = 255
+    )
+    var set []string
+    func init() {
+        set = []string{"M", "F"}
+    }
+  unknown: Unknown
+  toString: set[c]
+  fromString: byte(slices.Index(set, s))
+  postgresType: smallint
+- name: platform
+  imports:
+  - '"golang.org/x/exp/slices"'
+  basetype: byte
+  init: |-
+    const (
+        Android Platform = iota
+        IOS
+        Web
+        Unknown Platform = 255
+    )
+    var set []string
+    func init() {
+        set = []string{"android", "ios", "web"}
+    }
+  unknown: Unknown
+  toString: set[c]
+  fromString: byte(slices.Index(set, s))
+  postgresType: smallint
+- name: country
+  imports:
+  - '"github.com/biter777/countries"'
+  basetype: countries.CountryCode
+  init: ""
+  unknown: Country(countries.Unknown)
+  toString: countries.CountryCode(c).Alpha2()
+  fromString: countries.ByName(s)
+  postgresType: bigint

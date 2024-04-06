@@ -2,9 +2,7 @@ package config
 
 import (
     "os"
-    "log"
     "strconv"
-    "github.com/joho/godotenv"
 )
 
 var Debug bool
@@ -17,10 +15,8 @@ var DBport string
 var DBname string
 
 func init() {
-    err := godotenv.Load()
-    if err != nil {
-        log.Panicln("Error loading .env file")
-    }
+    loadenv()
+    var err error
     debugstr, exists := os.LookupEnv("DEBUG")
     if !exists {
         Debug = false
