@@ -13,7 +13,7 @@ type Time time.Time
 var format string
 
 func init() {
-    format = "2006-01-02T15:04:05.999Z"
+    format = "2006-01-02T15:04:05.000Z"
 }
 
 func Now() Time {
@@ -30,7 +30,7 @@ func (c *Time) UnmarshalJSON(b []byte) error {
     if err != nil {
         return err
     }
-    timetmp, err := time.Parse(format, tmp)
+    timetmp, err := time.ParseInLocation(format, tmp, time.Local)
     if err != nil {
         return err
     }
