@@ -5,7 +5,6 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile-test
-    user: api
     environment:
     - PORT=8000
     - DBSERVICE=postgres
