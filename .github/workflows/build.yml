@@ -1,0 +1,23 @@
+name: Build to binary
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '1.19'
+    - name: Build
+      run: make
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "bin/DcardBackendIntern2024"
+        token: ${{ secrets.GITHUB_TOKEN }}
