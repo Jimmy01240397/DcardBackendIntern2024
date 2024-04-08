@@ -29,6 +29,17 @@ curl "127.0.0.1:8000/api/v1/ad" | jq
 curl "127.0.0.1:8000/api/v1/ad?offset=15&limit=65&age=35&gender=F&country=SO&platform=android" | jq
 ```
 
+## ENV
+```
+PORT=8000
+DBSERVICE=postgres
+DBNAME=addb
+DBUSER=addb
+DBPASSWD=addb
+DBHOST=localhost
+DBPORT=5432
+```
+
 ## Run
 ### Use postgres
 ```bash
