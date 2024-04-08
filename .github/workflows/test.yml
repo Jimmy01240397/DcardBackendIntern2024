@@ -10,10 +10,14 @@ jobs:
     steps:
     # need checkout before using docker-compose-action
     - uses: actions/checkout@v3
-    - uses: cloudposse/github-action-docker-compose-test-run@main
+    - uses: adambirds/docker-compose-action@v1.3.0
       with:
-        file: "./docker-compose-test.yml"
-        service: api
-        entrypoint: "\"bash -c 'cd /src && sleep 5 && make test'\""
+        compose-file: "./docker-compose-test.yml"
+        down-flags: "--volumes"
+        services: |
+          db
+          cache
+        test-container: api
+        test-command: "bash -c 'sleep 5 && make test'"
 
 
