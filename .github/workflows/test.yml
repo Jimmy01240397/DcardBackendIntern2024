@@ -10,6 +10,7 @@ jobs:
     steps:
     # need checkout before using docker-compose-action
     - uses: actions/checkout@v3
+    - name: unit test start
       run: docker compose -f ./docker-compose-test.yml run --entrypoint "bash -c 'sleep 5 && make test'" --rm api
 
 
