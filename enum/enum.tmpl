@@ -4,6 +4,7 @@ import (
     "strings"
     "strconv"
     "context"
+    "math/rand"
     "encoding/json"
     "fmt"
     "database/sql/driver"
@@ -39,6 +40,14 @@ func FromString(s string) {{ .name | title }} {
         return {{ .unknown }}
     }
     return {{ .name | title }}({{ .fromString }})
+}
+
+func Random() {{ .name | title }} {
+    return {{ .name | title }}({{ .random }})
+}
+
+func Len() int {
+    return {{ .length }}
 }
 
 func (c {{ .name | title }}) MarshalJSON() ([]byte, error) {

@@ -9,7 +9,7 @@ import (
 )
 
 type AD struct {
-    ID uint `gorm:"primaryKey" json:"-"`
+    ID *uint `gorm:"primaryKey" json:"id,omitempty"`
     Title string `json:"title"`
     StartAt *time.Time `json:"startAt,omitempty"`
     EndAt *time.Time `json:"endAt,omitempty"`

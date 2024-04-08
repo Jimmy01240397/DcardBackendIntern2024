@@ -1,0 +1,6 @@
+FROM golang:1.19 as builder
+
+RUN apt install make
+
+COPY . /src
+WORKDIR /src

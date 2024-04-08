@@ -6,12 +6,12 @@ services:
     user: api
     environment:
     - PORT=8000
-    - DBSERVICE=postgres
+    - DBSERVICE=mysql
     - DBNAME=addb
     - DBUSER=addb
     - DBPASSWD=addb
     - DBHOST=db
-    - DBPORT=5432
+    - DBPORT=3306
     - REDISURL=cache:6379
     ports:
     - 8000:8000
@@ -23,13 +23,14 @@ services:
       default:
       internal:
   db:
-    image: postgres:latest
+    image: mariadb:latest
     environment:
-    - POSTGRES_USER=addb
-    - POSTGRES_PASSWORD=addb
-    - POSTGRES_DB=addb
+    - MYSQL_ROOT_PASSWORD=addb
+    - MYSQL_USER=addb
+    - MYSQL_PASSWORD=addb
+    - MYSQL_DATABASE=addb
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
     networks:
       internal:
   cache:
@@ -44,4 +45,4 @@ networks:
     internal: true
 
 volumes:
-  postgres-data:
+  mysql-data:

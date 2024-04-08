@@ -36,51 +36,65 @@ func NewFilter() Filter {
     }
 }
 
-func (c Filter) Find() (ads []AD) {
+func (c Filter) Find() (ads []AD, now time.Time) {
     var err error
-    ads, err = c.findCache()
+    ads, now, err = c.findCache()
     if ads != nil && err == nil {
         return
     }
-    ads, err = c.findSql()
+    ads, now, err = c.findSql()
     if err != nil {
         log.Panicln(err)
     }
-    c.setCache(ads)
+    c.setCache(ads, now)
     return
 }
 
-func (c Filter) setCache(ads []AD) {
+func (c Filter) setCache(ads []AD, now time.Time) {
     key, err := json.Marshal(c)
     if err != nil {
         return
     }
-    var ref AD
-    now := time.Now()
+    var ref, first AD
+
     result := c.genFilterSql().
-            Where("ads.start_at >= ?", now)
-    if len(ads) > 0 {
-        result = result.Where("ads.start_at < ?", *(ads[0].EndAt))
+            Where("ads.start_at <= ? and ads.end_at >= ?", now, now)
+    result = result.Group("ads.id")
+    result = result.Order("ads.end_at asc").Preload("Conditions").Take(&first)
+
+    firsterr := result.Error
+
+    result = c.genFilterSql().
+            Where("ads.start_at > ?", now)
+    if firsterr == nil {
+        result = result.Where("ads.start_at < ?", *(first.EndAt))
+        if len(ads) >= c.Limit {
+            result = result.Where("ads.end_at <= ?", *(ads[len(ads) - 1].EndAt))
+        }
     }
     result = result.Group("ads.id")
     result = result.Order("ads.start_at asc").Preload("Conditions").Take(&ref)
+
     var extime time.Time
-    if result.Error == nil && ref.StartAt.Before(*(ads[0].EndAt)) && (len(ads) < c.Limit || ref.EndAt.Before(*(ads[len(ads) - 1].EndAt)) ) {
+    if result.Error == nil {
         extime = *(ref.StartAt)
+    } else if firsterr == nil {
+        extime = *(first.EndAt)
     } else {
-        extime = *(ads[0].EndAt)
+        return
     }
-    _ = redis.Set(string(key), ads, extime.Sub(now))
+
+    _ = redis.Set(string(key), ads, extime)
     return
 }
 
-func (c Filter) findCache() (ads []AD, err error) {
+func (c Filter) findCache() (ads []AD, now time.Time, err error) {
     var key []byte
     key, err = json.Marshal(c)
     if err != nil {
         return
     }
-    err = redis.Get(string(key), &ads)
+    now, err = redis.Get(string(key), &ads)
     return
 }
 
@@ -119,10 +133,11 @@ func (c Filter) genFilterSql() (result *gorm.DB) {
     return
 }
 
-func (c Filter) findSql() (ads []AD, err error) {
+func (c Filter) findSql() (ads []AD, now time.Time, err error) {
+    now = time.Now()
     defaultfilter := NewFilter()
     result := c.genFilterSql().
-            Where("ads.start_at <= ? and ads.end_at >= ?", time.Now(), time.Now())
+            Where("ads.start_at <= ? and ads.end_at >= ?", now, now)
     result = result.Group("ads.id")
     if c.Limit != defaultfilter.Limit {
         result = result.Limit(c.Limit)

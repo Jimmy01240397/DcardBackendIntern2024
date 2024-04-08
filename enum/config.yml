@@ -12,6 +12,8 @@
     func init() {
         set = []string{"M", "F"}
     }
+  random: rand.Intn(Len())
+  length: len(set)
   unknown: Unknown
   toString: set[c]
   fromString: byte(slices.Index(set, s))
@@ -31,6 +33,8 @@
     func init() {
         set = []string{"android", "ios", "web"}
     }
+  random: rand.Intn(Len())
+  length: len(set)
   unknown: Unknown
   toString: set[c]
   fromString: byte(slices.Index(set, s))
@@ -39,7 +43,13 @@
   imports:
   - '"github.com/biter777/countries"'
   basetype: countries.CountryCode
-  init: ""
+  init: |-
+    var set []countries.CountryCode
+    func init() {
+        set = countries.All()
+    }
+  random: set[rand.Intn(Len())]
+  length: len(set)
   unknown: Country(countries.Unknown)
   toString: countries.CountryCode(c).Alpha2()
   fromString: countries.ByName(s)

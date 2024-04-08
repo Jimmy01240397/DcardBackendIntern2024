@@ -21,6 +21,10 @@ run: main.go go.mod go.sum $(importdir)
 		$(builder) generate ./...
 		$(builder) run $<
 
+test: main.go go.mod go.sum $(importdir)
+		$(builder) generate ./...
+		$(builder) test ./... -v
+
 install: $(path)/$(exe) $(systemddir)/$(systemd)
 
 $(path)/$(exe): $(instdir)/$(exe) $(instdir)/$(config)

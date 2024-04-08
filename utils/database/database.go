@@ -22,6 +22,9 @@ func init() {
     if config.Debug {
         gormconfig.Logger = logger.Default.LogMode(logger.Info)
     }
+    if !config.DBdebug {
+        gormconfig.Logger = logger.Default.LogMode(logger.Silent)
+    }
     switch config.DBservice {
     case "sqlite":
         db, err = gorm.Open(sqlite.Open(config.DBname), gormconfig)

@@ -90,8 +90,9 @@ func get(c *gin.Context) {
         })
         return
     }
-    ads := filter.Find()
+    ads, _ := filter.Find()
     for i, _ := range ads {
+        ads[i].ID = nil
         ads[i].EndAt = nil
         ads[i].Conditions = nil
     }

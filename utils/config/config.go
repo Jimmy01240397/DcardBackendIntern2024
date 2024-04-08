@@ -13,6 +13,7 @@ var DBpasswd string
 var DBhost string
 var DBport string
 var DBname string
+var DBdebug bool
 var RedisURL string
 var RedisPasswd string
 
@@ -26,6 +27,15 @@ func init() {
         Debug, err = strconv.ParseBool(debugstr)
         if err != nil {
             Debug = false
+        }
+    }
+    dbdebugstr, exists := os.LookupEnv("DBDEBUG")
+    if !exists {
+        DBdebug = true
+    } else {
+        DBdebug, err = strconv.ParseBool(dbdebugstr)
+        if err != nil {
+            DBdebug = false
         }
     }
     Port = os.Getenv("PORT")
